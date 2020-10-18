@@ -1,0 +1,17 @@
+{
+  "name": "expresssetup",
+  "version": "1.0.0",
+  "description": "routin webserver based on express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express"
+  ],
+  "author": "irahul",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
