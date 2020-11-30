@@ -1,0 +1,8 @@
+https://github.com/googleapis/google-api-python-client
+
+https://google-auth-oauthlib.readthedocs.io/en/latest/reference/google_auth_oauthlib.flow.html
+
+
+https://www.youtube.com/watch?v=9K2P2bWEd90&list=PL3JVwFmb_BnTamTxXbmlwpspYdpmaHdbz
+
+https://learndataanalysis.org/google-drive-api-in-python-getting-started-lesson-1/

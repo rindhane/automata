@@ -1,6 +1,7 @@
 import os 
 import json
 import hashlib
+from pathlib import PureWindowsPath
 
 
 file_name=input("enter reference Json file name: ")
@@ -16,6 +17,10 @@ def get_file_andHash_list():
 def get_root_path():
 	return ''
 
+def get_unix_path(path):
+	return str(PureWindowsPath(path)).replace("\\","/")
+
+
 root_path=get_root_path()
 file_list , hash_list =get_file_andHash_list()
 for (base_path,dirs,files) in os.walk(start_path):	
@@ -29,7 +34,7 @@ print("provided file path has been traversed")
 
 
 ref_hash_list=file_store_ref["hash_list"]
-ref_file_list=file_store_ref["file_list"]
+ref_file_list=[get_unix_path(fp) for fp in file_store_ref["file_list"]]
 
 #-------compare total number of files
 

@@ -1,0 +1,19 @@
+{
+  "name": "node_gdrive",
+  "version": "1.0.0",
+  "description": "js setup to access the gdrive api ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gdrive",
+    "api",
+    "google"
+  ],
+  "author": "irahul",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^62.0.0"
+  }
+}
