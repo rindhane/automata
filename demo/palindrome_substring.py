@@ -21,42 +21,32 @@ class sub_palindrome :
         if self.palindrome_check(tmp):
             return tmp if len(tmp) > len(ans) else ans
         return ans
-    def get_middle_palindrome(self,s:str,l:int,r:int) -> str :
-        for window in range(r-l,1,-1):
-            for pos in range(l,r-window+1):
+    def get_middle_palindrome(self,s:str) -> str :
+        for window in range(2,4):
+            for pos in range(0,len(s)-window+1):
                 if self.palindrome_check(s[pos:pos+window]):
-                    return (pos,pos+window)
-        else:
-            return (r-1,r)
+                    yield (pos,pos+window)
     def expand_middle_palindrome(self,s:str,l:int,r:int):
         i=l
         j=r
         size=len(s)
         ans=''
-        while (i>=0 and j<size):
+        while (i>=0 and j<=size):
             tmp=s[i:j]
+            print(i,j)
             ans=self.update_palindrome(ans,tmp)
             i=i-1
             j=j+1
         return ans
     def substring_divide(self,s:str) -> str :
         size=len(s)
-        limit=6
+        limit=3
         ans=''
         if size>=limit:
-            n=size//limit
-            div=[]
-            for i in range(0,n):
-                div.append(limit*i)
-            div.append(size)
-            centers=list()
-            for i in range(0,n):
-                result=self.get_middle_palindrome(s,div[i],div[i+1])
-                if result:
-                    centers.append(result)
-            for i in centers:
-                tmp=self.expand_middle_palindrome(s,i[0],i[1])
-                ans = tmp if len(ans) < len(tmp) else ans 
+            centers=self.get_middle_palindrome(s)    
+            for pos in centers:
+                tmp=self.expand_middle_palindrome(s,pos[0],pos[1])
+                ans = tmp if len(ans) < len(tmp) else ans
             if ans :
                 return ans 
             else :
