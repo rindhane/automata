@@ -1,9 +1,12 @@
 
+#credentials files
+credentials.json
+token.json
+
 
 #node modules:
 node_modules/
 
 
-#credentials files
-credentials.json
-token.json
+#python build files
+__pycache__/
