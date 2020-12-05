@@ -8,5 +8,6 @@ token.json
 node_modules/
 
 
-#python build files
+#python build & environment files
 __pycache__/
+pyenv/
