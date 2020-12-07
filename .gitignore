@@ -2,6 +2,7 @@
 #credentials files
 credentials.json
 token.json
+token.pickle
 
 
 #node modules:
