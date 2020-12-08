@@ -25,7 +25,7 @@ def get_credentials(client, scopes, url):
     flow.fetch_token(code=code)    
     return flow.credentials
 
-def get_drive_auth(filePath='token.pickle'):
+def get_drive_auth(filePath='token.pickle',clientPath='credentials.json'):
     API_SERVICE_NAME = 'drive' 
     API_VERSION ='v3'
     if os.path.exists(filePath):
@@ -33,7 +33,7 @@ def get_drive_auth(filePath='token.pickle'):
             credentials = pickle.load(token)
         return build(API_SERVICE_NAME, API_VERSION,credentials=credentials)
     else:
-        client,scopes,url=client_properties('credentials.json')
+        client,scopes,url=client_properties(clientPath)
         credentials=get_credentials(client,scopes,url)
         if credentials:
             with open(filePath, 'wb') as token:
