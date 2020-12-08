@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 from oauth import get_drive_auth
+import json
 
 
 def get_drive():
@@ -8,7 +9,10 @@ def get_drive():
 
 def walk_drive(callback):
     drive=get_drive()
-    schema='files(id, name, parents)'
+    schema='files(id, name, size, mimeType ,appProperties,version,\
+                    originalFilename, description,owners, quotaBytesUsed, \
+                    md5Checksum, webContentLink, spaces, headRevisionId,\
+                    shortcutDetails,sharingUser,ownedByMe)'
     http_req = drive.files().list(
         pageSize=1000, fields=f"nextPageToken, {schema}",)
 
@@ -18,8 +22,9 @@ def walk_drive(callback):
         http_req=drive.files().list_next(http_req,files)
 
 def get_root(drive,id_):
+    schema='id, parents'
     result=drive.files().get(fileId=id_, 
-                            fields='id, name, parents').execute()
+                            fields=f'{schema}').execute()
     parent=result.get('parents', None)
     if type(parent)==type(list()):
         return get_root(drive,parent[0])
@@ -49,13 +54,20 @@ def print_id(files_list):
             ' ', file_schema.get('parents',None) )
 
 
-def get_filePath(drive,files_list):
+def make_jsonIndex(drive,files_list,index=dict()):
     for file_schema in files_list:
-        path=create_path(drive,id_=file_schema.get('id'))
-        print(file_schema.get('name'), ' ', path)
+        file_id=file_schema.get('id')
+        path=create_path(drive,id_=file_id)
+        index[file_id] = file_schema
+        index[file_id].update({'path': path})
+        print(index[file_id])
+    fp=open('index.json','w')
+    fp.write(json.dumps(index))
+    fp.close()
     print("Path of all files have been printed")
 
+
 if __name__== "__main__":
-    walk_drive(get_filePath)
+    walk_drive(make_jsonIndex)
 
     
