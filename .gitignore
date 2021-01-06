@@ -13,3 +13,7 @@ node_modules/
 #python build & environment files
 __pycache__/
 pyenv/
+
+#gradle build & run config files
+.gradle/
+build/
