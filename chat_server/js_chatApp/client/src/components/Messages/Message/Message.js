@@ -7,7 +7,7 @@ const Message = ({message,name})=>{
 
     const trimmedName=name.trim().toLowerCase();
 
-    if(message.user=== trimmedName){
+    if(message.senderID.toString().toLowerCase()== trimmedName){
         isSentByCurrentUser=true;
     }
 
@@ -28,7 +28,7 @@ const Message = ({message,name})=>{
                     <div className="messageBox backgroundLight">
                         <p className="messageText colorDark">{ReactEmoji.emojify(message.text)}</p>
                     </div>
-                    <p className="sentText pl-10">{message.user}</p>
+                    <p className="sentText pl-10">{message.name.toString()}</p>
                 </div>
             )
 

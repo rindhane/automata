@@ -1,0 +1,8 @@
+#credentials files
+creds/
+app.yaml
+*.env
+
+#build & deployment files
+deployment/
+

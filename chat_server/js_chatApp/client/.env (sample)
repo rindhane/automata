@@ -1,0 +1,9 @@
+REACT_APP_FIREBASE_API_KEY=x.x.x.x.x.x.x.x.x.
+REACT_APP_FIREBASE_AUTHDOMAIN=x.x.x.x.x.x.x.x.x.x
+REACT_APP_FIREBASE_PROJECTID=x.x.x.x.x.xx.
+REACT_APP_FIREBASE_STORAGEBUCKET=x.x.x.x.x.x.x.x.
+REACT_APP_FIREBASE_MESSAGINGSENDERID=x.x.x.x.x.x.xx.x.
+REACT_APP_FIREBASE_APPID=x.x.x.x.x.x.x.x.x.x.x
+REACT_APP_FIREBASE_MESASUREMENTID=x.x.x.x.x.x.x.x
+REACT_APP_CHAT_SERVER=x.x.x.x.x.x.xx..
+#development http://localhost:5000

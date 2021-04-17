@@ -1,0 +1,28 @@
+#Issues: 
+1. Development script starts the services of both client and server , but both the services doesn't get attached to the terminal on which startup development script was run. i.e can't find them under jobs command.
+
+
+
+
+#Procedure for Setup: 
+client : 
+1. Rename ".env(sample)" to .env . These file is required by npm start script to have react include the inside variables as environment variables for react script. 
+2.Substitute all the firebase variables' value as available in the config file provided by firebase app/projects settings for client.
+3. Substitute the server value with required value depending upon whether you are testing on development server or production server.
+
+server: 
+1. Create a folder with name 'creds' in the root folder of server.
+2. Place "admin-credentials.json" & "firebase-client-config.json" in these folders. 
+3. In "init-firebase.js" file , assign "firebase-client-config.json" path to firebaseClientConfig.
+4. In development_start.sh file, assingn the path of "admin-credentials.json" to GOOGLE_APPLICATION_CREDENTIALS.
+5. Instead of setting environment variable "GOOGLE_APPLICATION_CREDENTIALS" set the path of "admin-credentials.json" to SERVER_CRED in adminFirebase.js file and use the serviceAccount parameter in the admin.initializeApp. 
+
+for deployment in gcloud:   
+1. Set the required gcloud project in the terminal.
+2. Rename app(sample).yaml to app.yaml for gcloud app deployment.
+2. In app.yaml, assign the path of "admin-credentials.json" to GOOGLE_APPLICATION_CREDENTIALS.
+3. provide the hosting serever URL and port in app.yaml file
+4. go js_chatApp folder (root of complete application of chat server and client) 
+5. run the deployment.sh from these terminal's path location.
+
+

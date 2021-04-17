@@ -1,76 +1,38 @@
-import React, {useState, useEffect} from 'react';
-import queryString from "query-string";
-import io from "socket.io-client";
+import React,{useMemo, useEffect, } from 'react';
 import InfoBar from '../InfoBar/InfoBar';
 import  './Chat.css';
 import Input from '../Input/Input';
 import Messages from '../Messages/Messages';
 import UserSideBar from '../UserSideBar/UserSideBar';
-let socket;
+import { MessagesProvider } from '../../context/MessageProvider';
+import { useSocket } from '../../context/socketProvider';
 
-const Chat = ({location})=> {
-    const ENDPOINT = 'http://localhost:5000';
-    const [name,setName]=useState('');
-    const [room,setRoom]=useState('');
-    const[roomUsers,setRoomUsers]=useState([]);
-    const [message,setMessage]=useState('');
-    const [messages,setMessages]=useState([]);
+
+const Chat = ({mId, setMid})=> {
+    const {SocketRelay}=useSocket();
+    const Csocket=useMemo(()=>{
+        return SocketRelay(mId)
+    },[mId])
     useEffect(()=>{
-        const {name, room}=queryString.parse(location.search);
-        socket=io(ENDPOINT);
-        setName(name);
-        setRoom(room);
-        socket.emit('join',{name: name, room:room},(error) => {
-            alert(error);
-        });
-
-        return () => {
-            socket.emit("disconnect");
-            socket.off();
-        }
-    },[ENDPOINT,location.search]);
-
-    useEffect(()=>{
-        socket.on('message',(message)=> {
-            setMessages([...messages, message]);
-        })
-    },[messages]);
-
-    const sendMessage = (event) => {
-        event.preventDefault();
-
-        if(message) {
-            socket.emit('sendMessage', message, (state)=> {
-                if(state){
-                setMessage("")
-                }else{
-                    alert('Rejoin, the connection has disrupted');
-                };
-                        }
-                );
-        }
-    }
-
-    useEffect(()=>
-    {
-        socket.on('roomData',({users}) => 
-            {console.log("received",users);
-            setRoomUsers(users.map((user)=>{return user.name}));} , [roomUsers] );
-    })
-
+        
+        console.log('chat loaded');
+        return ()=>{
+            Csocket.emit('disarm');
+            Csocket.close();
+            }
+    },[mId])
     return (
         <div className="outerContainer">
-            <div className="sideContainer">
-               <UserSideBar users={roomUsers}/>
-            </div>
-            <div className="container">
-                <InfoBar room={room} />
-                <Messages messages={messages} name={name}/>
-                <Input message={message} 
-                    setMessage={setMessage}
-                    sendMessage={sendMessage} 
-                />
-            </div>
+            <MessagesProvider socket={Csocket}>
+                <div className="sideContainer">
+                <UserSideBar socket={Csocket}/>
+                </div>
+                <div className="container">
+                    <InfoBar  socket={Csocket} setMid={setMid}/>
+                    <Messages myId={mId}/>
+                    <Input  myId={mId}/>
+                </div>
+            </MessagesProvider>
         </div>
     )
 };

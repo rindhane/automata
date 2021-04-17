@@ -69,3 +69,9 @@ html, body {
   button:focus {
     outline: 0;
   }
+
+  .PhoneInput{
+    display: flex;
+    flex-direction: row;
+    background-color: #c3dbf7;
+  }

@@ -1,16 +1,30 @@
-import React from 'react';
+import React , {useState,useEffect} from 'react';
 import './Messages.css';
 import Message from './Message/Message';
 import ScrollToBottom from 'react-scroll-to-bottom';
-const Messages = ({messages, name}) => {
+import {useMessages} from '../../context/MessageProvider';
+
+
+const Messages = ({myId}) => {
+
+    const [conversations,setConversations]=useState([]);
+    const [room,setRoom]=useState('');
+    const { formattedMessages, receipientSelectedArray,selected, messages} = useMessages();
+    
+    useEffect(()=>{
+        const {recipient}=receipientSelectedArray(messages,selected);
+        setConversations(formattedMessages(recipient));
+        setRoom(recipient);
+    },[selected,messages])
+    
     return (
         <ScrollToBottom className="messages">
             {
-                messages.map(
+                conversations.map(
                     (message,i) => { 
                         return (
                             <div key={i}> 
-                                <Message message={message} name={name}/>
+                                <Message message={message} name={myId.id.toString()}/>
                             </div> ) 
                         })
             }

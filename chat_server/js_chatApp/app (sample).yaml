@@ -1,0 +1,18 @@
+service : chat
+
+runtime: nodejs12
+
+env: standard
+
+env_variables:
+  CHAT_SERVER: "https://site.x.x.appspot.com/"
+  PORT: 8080
+  GOOGLE_APPLICATION_CREDENTIALS: "path/to/creds/credentials.json"
+
+
+handlers : 
+
+- url: /.*
+  secure: always
+  redirect_http_response_code: 301
+  script: auto
