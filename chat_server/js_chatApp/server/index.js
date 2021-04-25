@@ -38,7 +38,7 @@ io.on('connection',(socket)=>
     if (getUser(id))
     {
     const user=getUser(id);
-    if (user.token == token) {
+    if (user.token == token && token!=undefined) {
             if (!getLiveUser(user.id)){
                 addLiveUser(user);
                 socket.broadcast.to(MasterUser().id).emit('message',{sender:id, name:`${user.name}`, text: `${user.name}, has joined!`});
@@ -73,16 +73,15 @@ io.on('connection',(socket)=>
                 }
                 if (user)
                 {
-                io.to(MasterUser().id).emit('message', {sender:socket.handshake.query.id, text:`${user.name} has left`});
+                io.to(MasterUser().id).emit('message', {sender:socket.handshake.query.id, name:getUser(socket.handshake.query.id).name ,text:`${user.name} has left`});
                 io.to(MasterUser().id).emit('roomData',{room:user.room,users:getUsersInRoom(user.room)});
                 }
             });
     }}
     socket.on('initiateUser',({mobile, verificationId},callback)=>{
         const id = generateId();
-        const key=generateKey({mobile});
-        initiateUser({id:id,mobile:mobile,
-                token:key, verificationId:verificationId
+        initiateUser({id:id, mobile:mobile,
+             verificationId:verificationId
         });
     });
     socket.on('otp',({name,mobile,otp,verificationId},callback)=>{
@@ -93,6 +92,7 @@ io.on('connection',(socket)=>
                     if (credential) {
                         if(user.name!=MasterUser().name){user.name=name};
                         user.gcredential=credential;
+                        user.token=generateKey({mobile});
                         socket.emit('getToken',{id:user.id,name:user.name,token:user.token,mobile:user.mobile,gcredential:credential});
                         console.log('token sent');
                         UpdateUserBackend(user);

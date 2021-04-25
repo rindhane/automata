@@ -68,16 +68,16 @@ const getUsersInRoom = () => {
     return liveUsers.map((user)=> {return user.id});
 }
 
-const initiateUser = ({id,mobile,token,verificationId}) => {
+const initiateUser = ({id,mobile,verificationId}) => {
     let user;
     if (getNewUser({mobile})) {
         user = getNewUser({mobile});
-        user.token=token;
+        //user.token=token;
         user.verificationId=verificationId;
         //console.log('oldinitiation',user,users);
         UpdateUserBackend(user);
     } else {
-        user = {id,mobile:mobile,val:mobile,token,verificationId};
+        user = {id,mobile:mobile,val:mobile,verificationId};
         users.push(user);
         UpdateUserBackend(user);
         //console.log('newinitiation',user,users);   
