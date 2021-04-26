@@ -2,9 +2,12 @@
 from oauth import get_drive_auth
 import json
 
-
 def get_drive():
-    return get_drive_auth(filePath='token.pickle',clientPath='credentials.json')
+    tmp = get_drive_auth(filePath='token.pickle',clientPath='credentials.json')
+    if tmp :
+        return tmp
+    else :
+        raise Exception("User not Authenticated")  
 
 
 def walk_drive(callback):
