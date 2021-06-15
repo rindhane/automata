@@ -1,0 +1,5 @@
+#secret files
+client_secret.json
+
+#python files
+pyenv/
