@@ -1,0 +1,20 @@
+[2021-05-13 11:43:33,472] 127.0.0.1 requested http://127.0.0.1:8000/ 
+INFO in app : %s logged in successfully
+[2021-05-13 11:51:57,757] 127.0.0.1 requested http://127.0.0.1:8000/ 
+INFO in app : check
+[2021-05-13 11:53:31,582] 127.0.0.1 requested http://127.0.0.1:8000/ 
+INFO in app : check
+[2021-05-13 11:58:43,989] 127.0.0.1 requested http://127.0.0.1:8000/ 
+mylogger : INFO in app : check
+[2021-05-13 11:58:43,992] 127.0.0.1 requested http://127.0.0.1:8000/ 
+mylogger : INFO in app : check
+[2021-05-13 11:59:58,591] 127.0.0.1 requested http://127.0.0.1:8000/ 
+mylogger : INFO in app : check
+[2021-05-13 12:02:29,020] 127.0.0.1 requested http://127.0.0.1:8000/ 
+mylogger : INFO in app : check
+[2021-05-13 12:02:50,781] 127.0.0.1 requested http://127.0.0.1:8000/ 
+mylogger : INFO in app : check
+[2021-05-13 12:09:25,027] 127.0.0.1 requested http://127.0.0.1:8000/ with path GET /  
+mylogger : INFO in app : check
+[2021-05-13 12:10:24,195] 127.0.0.1 requested http://127.0.0.1:8000/sms with path GET /sms  
+mylogger : INFO in app : print_sms
