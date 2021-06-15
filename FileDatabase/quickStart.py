@@ -1,8 +1,15 @@
 from src.manager import  Database
-from src.MiddlewareSetup import localFileMiddleware
+from src.MiddlewareSetup import localFileMiddleware, gcloudMiddleware
 
-fileWare=localFileMiddleware(filepath='database.json', dataPath='trial_db')
+#fileWare=localFileMiddleware(filepath='database.json', dataPath='trial_db')
+#db=Database(middleware=fileWare)
+
+fileWare=gcloudMiddleware(filepath='database.json', 
+                         datapath='database-cloud',
+                         service_account_path='client_secret.json'
+                         )
 db=Database(middleware=fileWare)
+
 
 #***scripts for creating a fresh database ********
 #following block also gives idea of complete schema
