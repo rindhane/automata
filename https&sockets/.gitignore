@@ -1,0 +1,8 @@
+#secret credentials
+secrets/
+
+
+#python environment and build files
+pyenv/
+__pycache__/
+
