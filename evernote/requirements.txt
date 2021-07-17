@@ -1,0 +1,4 @@
+evernote3
+requests
+brotlicffi
+oauth2 #used by evernote client internally

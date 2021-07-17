@@ -1,0 +1,5 @@
+#python runtime libaries
+pyenv/
+
+#individual secrets
+secrets/
