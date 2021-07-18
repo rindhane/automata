@@ -1,0 +1,13 @@
+.node {
+    display: flex;
+    border-style:dashed;
+    position:absolute;
+}
+
+.title{
+    font-size: large;
+}
+
+.message {
+    font-size : small;
+}
