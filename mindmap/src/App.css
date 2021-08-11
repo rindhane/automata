@@ -1,0 +1,28 @@
+
+.App{
+    display:flex;
+    flex-direction: column;
+}
+
+.Header {
+    display: flex;
+    width:100vw;
+    height: 10vh;
+    background-color: aquamarine;
+
+}
+
+.Footer {
+    display: flex;
+    width:100vw;
+    height:10vh;
+    background-color: cadetblue;
+}
+
+.Playground{
+    height:80vh;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+}

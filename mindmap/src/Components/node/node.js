@@ -1,51 +1,67 @@
 import React, { useState } from 'react';
 import './node.css';
+import {ReactComponent as AddSVG} from './add.svg';
+import {useNodeMapContext, node_generator} from '../../Contexts/nodemap';
 
-let onMouseMove= (e,change,top,left,
-                    setLeft,setTop, index) => {
+const onMouseMove= (e,change,top,left,
+                    setLeft,setTop,) => {
     if (change){
         setTop(top+e.movementY);
         setLeft(left+e.movementX);
             };    
   }
 
-let onMouseDown= (e, setChange, index) => {
+const onMouseDown= (e, setChange, ) => {
     setChange(true);
 }
 
-let onMouseUp = (e, setChange,index)=>{
+const onMouseUp = (e, setChange,)=>{
     setChange(false);
 }
 
-let click=(setHeight)=>{
-    setHeight('10vh');
+const parsePixel=(size)=>{
+    return size.toString()+'px'
+}
+
+const addNode = (title,level,func)=>{
+    const newNode= node_generator ({title,level});
+    console.log(newNode);
+    func(newNode);
+
+
 }
 
 function Node (props) {
     const [change,setChange]=useState(false);
     const [top,setTop]=useState(parseInt(props.top));
     const [left,setLeft]=useState(0);
-    const [height,setHeight]=useState('2vh');
+    //eslint-disable-next-line
+    const {map,nodeAdder}=useNodeMapContext();
+    // eslint-disable-next-line
+    const [height,setHeight]=useState(parsePixel(props.size));
     let title=props.title;
     let message= props.message;
-    let index=props.index;
+    let level=props.level;
     let style= {height:height,
                 width:height,
-                top:top.toString()+'px',
-                left:left.toString()+'px',
+                top:parsePixel(top),
+                left:parsePixel(left),
                 };
     return (
         <div className='node' 
             style = {style}
             onMouseMove={(e)=>onMouseMove(e,
                                             change,top,left,
-                                            setLeft,setTop, index)}
-            onMouseDown={(e)=>onMouseDown(e,setChange,index)}
-            onMouseUp={(e)=>onMouseUp(e,setChange,index)}
-            onMouseLeave={(e)=>onMouseUp(e,setChange,index)}
-            onClick={(e)=>click(setHeight)} >
+                                            setLeft,setTop)}
+            onMouseDown={(e)=>onMouseDown(e,setChange)}
+            onMouseUp={(e)=>onMouseUp(e,setChange)}
+            onMouseLeave={(e)=>onMouseUp(e,setChange)}
+            onClick={(e)=>null} >
             <div className='title'>
-                {title} {index}
+                {title}
+            </div>
+            <div onClick = {(e)=>{addNode('ChildNode',level+1,nodeAdder)}}> 
+                <AddSVG /> 
             </div>
             <div className = 'message'>
                 {message}

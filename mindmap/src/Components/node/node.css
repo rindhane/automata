@@ -1,10 +1,12 @@
-.node {
+
+
+.node{
     display: flex;
     border-style:dashed;
-    position:absolute;
+    position:relative;
 }
 
-.title{
+.title {
     font-size: large;
 }
 

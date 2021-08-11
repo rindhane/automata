@@ -1,16 +1,16 @@
 import './App.css';
-import Node from './Components/node/node.js'
-
+import Playground from './Components/playground/playground';
+import {NodeMapProvider} from './Contexts/nodemap.js';
 
 
 function App() {
   return (
-    <div>
-    <Node title='Box' index='1' top='0'/>
-    <Node title='Box ' index = '2' 
-          message='just additional box'
-          top = '100'
-          />
+    <div className='App'>
+      <NodeMapProvider>
+      <div className='Header'></div>
+      <Playground />
+      <div className='Footer'></div>
+      </NodeMapProvider>
     </div>
   );
 }
