@@ -1,14 +1,14 @@
 import './App.css';
 import Playground from './Components/playground/playground';
 import {NodeMapProvider} from './Contexts/nodemap.js';
-
+import  {Header} from './Components/headers/headers.js';
 
 function App() {
   return (
     <div className='App'>
       <NodeMapProvider>
-      <div className='Header'></div>
-      <Playground />
+      <Header/>
+      <div className='Playground'><Playground /> </div>
       <div className='Footer'></div>
       </NodeMapProvider>
     </div>

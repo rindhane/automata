@@ -1,0 +1,5 @@
+.canvas{
+     display:flex;
+     flex-grow: 3;
+     position:fixed;
+}

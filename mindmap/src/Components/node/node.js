@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import './node.css';
 import {ReactComponent as AddSVG} from './add.svg';
-import {useNodeMapContext, node_generator} from '../../Contexts/nodemap';
+import {useNodeMapContext, } from '../../Contexts/nodemap';
+
 
 const onMouseMove= (e,change,top,left,
-                    setLeft,setTop,) => {
+                    setLeft,setTop,element,elementUpdater) => {
     if (change){
-        setTop(top+e.movementY);
-        setLeft(left+e.movementX);
-            };    
+        const topNew=top+e.movementY;
+        const leftNew=left+e.movementX;
+        setTop(topNew);
+        setLeft(leftNew);
+        element.top=topNew;
+        element.left=leftNew;
+        elementUpdater(element);
+        };    
   }
 
 const onMouseDown= (e, setChange, ) => {
@@ -22,49 +28,54 @@ const onMouseUp = (e, setChange,)=>{
 const parsePixel=(size)=>{
     return size.toString()+'px'
 }
-
-const addNode = (title,level,func)=>{
-    const newNode= node_generator ({title,level});
-    console.log(newNode);
-    func(newNode);
-
-
+const addNode = ({level, top, left,size,id},adder,generator)=>{
+    level = level + 1; 
+    top =  top + 20;
+    left= left+20;
+    const title='New ChildNode';
+    const message= 'No Message';
+    const newNode= generator({title,level,top,left,message,size,parentId:id});
+    adder(newNode);
 }
 
-function Node (props) {
+const Node= (props)=> {
+    const element=props.element;
+    const ref=props.refLinker;
     const [change,setChange]=useState(false);
-    const [top,setTop]=useState(parseInt(props.top));
-    const [left,setLeft]=useState(0);
-    //eslint-disable-next-line
-    const {map,nodeAdder}=useNodeMapContext();
-    // eslint-disable-next-line
-    const [height,setHeight]=useState(parsePixel(props.size));
-    let title=props.title;
-    let message= props.message;
-    let level=props.level;
-    let style= {height:height,
-                width:height,
+    const [top,setTop]=useState(parseInt(element.top));
+    const [left,setLeft]=useState(()=>{
+            if (element.left) {return parseInt(element.left);}
+            return 20;});
+    const {nodeAdder,node_generator,nodeUpdater}=useNodeMapContext();
+    let style= {height:parsePixel(element.size),
+                width:parsePixel(element.size),
                 top:parsePixel(top),
                 left:parsePixel(left),
                 };
     return (
-        <div className='node' 
+        <div ref = {(node)=>{
+            if(node)
+            {ref({id:element.id,node});}
+        }} className='node' 
             style = {style}
             onMouseMove={(e)=>onMouseMove(e,
                                             change,top,left,
-                                            setLeft,setTop)}
+                                            setLeft,setTop,
+                                            element,nodeUpdater)}
             onMouseDown={(e)=>onMouseDown(e,setChange)}
             onMouseUp={(e)=>onMouseUp(e,setChange)}
             onMouseLeave={(e)=>onMouseUp(e,setChange)}
             onClick={(e)=>null} >
             <div className='title'>
-                {title}
+                {element.title}
             </div>
-            <div onClick = {(e)=>{addNode('ChildNode',level+1,nodeAdder)}}> 
+            <div onClick = {(e)=>{
+                e.preventDefault();
+                addNode(element,nodeAdder,node_generator)}}> 
                 <AddSVG /> 
             </div>
             <div className = 'message'>
-                {message}
+                {element.message}
             </div>
         </div>
     )

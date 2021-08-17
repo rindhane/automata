@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import {v4 as uuid} from 'uuid';
 
 let NodeMapContext = React.createContext();
 
@@ -13,44 +14,62 @@ function getSavedValue(key,default_value) {
     return default_value;
 }
 
-export const node_generator = ({title,level})=> {
-    return {
-        title:title,
-        level:level,
-    }
-}
-
-const initial_generator = () =>{
+const initial_generator = (func) =>{
     const result=[]
+    let parentId;
     for (let i=0; i<2; i++) {
-        let tmp=node_generator({
+        let tmp=func({
             title:`Title:${i}`,
             level:i,
-        })
+            parentId: parentId ? parentId : null, 
+                })
+        parentId=tmp.id;
         result.push(tmp);
     }
     return result;
 }
 
 export function NodeMapProvider({children}) {
-   const [key,setKey] = useState('mainKey');
+    const MAIN_KEY='mainKey';
+    const node_generator = ({title,level,top,left,size,message,parentId},)=> {
+            return {
+            title:title,
+            id:(()=>uuid())(),
+            level:level ? level:1,
+            top:top? top:0,
+            left:left?left:0,
+            size:size,
+            message:message,
+            parentId:parentId,
+                    }
+    }
    const [ map, setMap ]= useState(()=>{
-       return getSavedValue(key,initial_generator);
-   });
-   
+       return getSavedValue(MAIN_KEY,()=>initial_generator(node_generator));
+   });   
    useEffect(()=>{
-       localStorage.setItem(key,JSON.stringify(map));
-   },[key,map])
+       localStorage.setItem(MAIN_KEY,JSON.stringify(map));
+   },[MAIN_KEY,map]);
 
    const nodeAdder = (newVal) =>{
     setMap([...map,newVal]);
-    }   
-
+    }
+    const getNode= (id) => {
+        const index= map.findIndex(element=>id===element.id);
+        return map[index];
+    }
+    const nodeUpdater=(nodeNew)=>{
+        const index=map.findIndex(element=>nodeNew.id===element.id);
+        map[index]=nodeNew;
+        setMap(map);
+        localStorage.setItem(MAIN_KEY,JSON.stringify(map));
+    }
     const ContextValues = {
         map,
-        setKey,
         setMap,
         nodeAdder,
+        node_generator,
+        nodeUpdater,
+        getNode,
     }
    return (
        <NodeMapContext.Provider value = {ContextValues}>

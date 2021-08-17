@@ -2,14 +2,15 @@
 
 .node{
     display: flex;
+    position:fixed;
     border-style:dashed;
     position:relative;
 }
 
 .title {
-    font-size: large;
+    font-size: 0.8em;
 }
 
 .message {
-    font-size : small;
+    font-size : 0.5em;
 }
