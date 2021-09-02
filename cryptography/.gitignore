@@ -1,2 +1,8 @@
 #python runtime files
 pyenv/
+__pycache__/
+*.pyc
+
+#secrets
+Creds/
+NewCreds/
