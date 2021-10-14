@@ -11,10 +11,12 @@ from google.oauth2.credentials import Credentials
 def client_properties(filePath='credentials.json'):
     client_detatils_path=filePath
     scopes = ['https://www.googleapis.com/auth/drive.metadata.readonly',
-                'https://www.googleapis.com/auth/drive.file']
+                'https://www.googleapis.com/auth/drive.file',
+                'https://www.googleapis.com/auth/drive',
+                'https://www.googleapis.com/auth/drive.readonly',
+                ]
     redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
     return client_detatils_path, scopes, redirect_uri
-
 
 def get_user_authenticated(client, scopes, url):    
     flow = Flow.from_client_secrets_file(
@@ -30,6 +32,7 @@ def get_user_authenticated(client, scopes, url):
         return flow.credentials
     except : 
         return None
+
 def storeUserCred(userFile,creds):
     with open(userFile, 'w') as token:
         token.write(creds.to_json())
