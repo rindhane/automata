@@ -96,7 +96,7 @@ def make_jsonIndex(drive,files_list,index=dict()):
 
 def upload_file(drive,**kwargs):
     file_metadata=kwargs.get('metadata',{})
-    file_mime=kwargs.get('file_mime','application/file-blob') #'image/jpeg'
+    file_mime=kwargs.get('file_mime','application/file-blob') 
     file_path=kwargs.get('file_path',None)
     if file_path is None:
         raise Exception('file_path was not provided')
@@ -107,6 +107,17 @@ def upload_file(drive,**kwargs):
                                 fields='id',
                                 ).execute()
     return file_tmp
+
+def upload_files_in_folder(drive,**kwargs):
+    files_name_array=kwargs.get('files')
+    rootPath=kwargs.get('rootPath')#folderPath of directory of files
+    if rootPath is None:
+        raise Exception("rootpath was not provided")
+    for file_ in files_name_array:
+        metadata=dict()
+        metadata['name']=file_
+        file_mime=extension_to_mime()
+
 
 if __name__== "__main__":
     walk_drive(make_jsonIndex)

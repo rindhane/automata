@@ -46,11 +46,10 @@ def isUserAvailable(userFile):
                                 json.load(open(userFile,'r')).get('scopes'),
                                 )
             if not credentials.valid :
-                credentials=None
-            elif credentials.expired and credentials.refresh_token:
-               credentials.refresh(Request())
+                if credentials.expired and credentials.refresh_token:
+                    credentials.refresh(Request())
         except: 
-                credentials=None #check is pass statement can be used here 
+                pass #check is pass statement can be used here 
     return credentials
 
 def get_drive_auth(filePath='token.pickle',clientPath='credentials.json'):
@@ -65,6 +64,7 @@ def get_drive_auth(filePath='token.pickle',clientPath='credentials.json'):
             storeUserCred(filePath,credentials)
             return build(API_SERVICE_NAME, API_VERSION, credentials=credentials)
     return None    
+
 if __name__ == '__main__':
     pass      
 
