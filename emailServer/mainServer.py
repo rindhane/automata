@@ -1,54 +1,59 @@
 #! /usr/bin/env python
+import asyncio
+from functools import partial
 
-import selectors
-import socket
+class ExampleHandler:
+    async def handle_RCPT(server, session, envelope, address, rcpt_options):
+        if not address.endswith('@example.com'):
+            return '550 not relaying to that domain'
+        envelope.rcpt_tos.append(address)
+        return '250 OK'
+    
+    async def handle_DATA(server, session, envelope):
+        print('Message from %s' % envelope.mail_from)
+        print('Message for %s' % envelope.rcpt_tos)
+        print('Message data:\n')
+        for ln in envelope.content.decode('utf8', errors='replace').splitlines():
+            print(f'> {ln}'.strip())
+        print()
+        print('End of message')
+        return '250 Message accepted for delivery'
 
-host=127.0.0.1
-port = 65432
-sel = selectors.DefaultSelector()
 
-lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-lsock.bind((host,port))
-lsock.listen()
-print('listening on >',(host,':',port))
-lsock.setblocking(False)
-sel.register(lsock,selectors.EVENT_READ, data='server')
+from aiosmtpd.controller import Controller
+from aiosmtpd.handlers import Sink
+from aiosmtpd.smtp import SMTP, DATA_SIZE_DEFAULT
 
-while True:
-    events = sel.select(timeout=None)
-    for key, mask in events:
-        if key.data == 'server':
-            accept_wrapper(key.fileobj)
-        else:
-            service_connections(key,mask)
+HOST='127.0.0.1'
+PORT=8025
+SMTPS_CONTEXT = None
+handler= ExampleHandler()
+serverFactory = partial(
+        SMTP,
+        handler,
+        data_size_limit=DATA_SIZE_DEFAULT,
+        enable_SMTPUTF8=False,
+        tls_context=SMTPS_CONTEXT,
+        require_starttls=False,
+    )
 
-def accept_wrapper(sock):
-    conn, addr = sock.accept()
-    print('accepted connection from',addr)
-    conn. setblocking(False)
-    data= types.SimpleNamespace(addr=addr, inb=b'', outb=b'')
-    events=selectors.EVENT_READ | selectors.EVENT_WRITE
-    sel.register(conn,events, data=data)
 
-def service_connection(key,mask):
-    sock=key.fileobj
-    data=key.data
-    if mask & selectors.EVENT_READ :
-        recv_data =sock.recv(1024)
-        if recv_data :
-            data.outb+= recv_data
-        else:
-            print('closing connection to', data.addr)
-            sel.unregister(sock)
-            sock.close()
-    if mask & selectors.EVENT_WRITE:
-        if data.outb:
-            print('echoing', repr(data.outb), 'to', data.addr)
-            sent = sock.send(data.outb)
-            data.outb = data.outb[sent:]
+controller = Controller(ExampleHandler,timeout=200, server_kwargs=dict(timeout=400))
 
-#pending complete it with the help of following references:
-
-https://realpython.com/python-sockets/
-https://github.com/realpython/materials/tree/master/python-sockets-tutorial
-https://chaobin.github.io/
+if __name__ == "__main__" : 
+    try:
+        loop = asyncio.get_event_loop()
+        server=loop.create_server(serverFactory,host=HOST, port=PORT, ssl=SMTPS_CONTEXT)
+        controller.start()
+        server_loop = loop.run_until_complete(server)
+        loop.run_forever()
+        print('controller started')
+    except KeyboardInterrupt:
+        pass
+    except:
+        print("Something went wrong")
+    finally:
+        controller.stop()
+        loop.run_until_complete(server_loop.wait_closed())
+        server_loop.close()
+        loop.close()
