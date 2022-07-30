@@ -1,6 +1,5 @@
 #credentials files
-credentials.json
-token.pickle
+env_secrets/
 
 #python runtime files
 pyenv/
