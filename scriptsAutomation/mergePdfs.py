@@ -1,4 +1,4 @@
-from PyPDF2 import PdfFileMerger, PdfFileReader
+from PyPDF2 import PdfFileMerger, PdfFileReader,PdfMerger, PdfReader
 import os 
 import argparse
 import re
@@ -44,11 +44,14 @@ def main(path1=args.files_folder,path2=args.final_file,order=args.order_merge):
     else:
         files=get_individual_file_from_walk(individual_pdfs_folder_path)
     # Call the PdfFileMerger
-    mergedObject = PdfFileMerger() 
+    #mergedObject = PdfFileMerger() # PDFFileMerger is deprecated
+    mergedObject = PdfMerger()
     # Write all the files into a file which is named as shown below
     for fileName in files:
-        mergedObject.append(PdfFileReader(fileName, 'rb'))
-    mergedObject.write(path_final_pdf)
+        #mergedObject.append(PdfFileReader(fileName, 'rb')) #PdfFileReader is deprecated
+        mergedObject.append(PdfReader(fileName, 'rb'))
+    
+    mergedObject.write(path_final_pdf) # write is not class method, so requires self pointer & provided by 'self'
     print(f'Merged file saved at location : {path_final_pdf}')
 
 if __name__ =="__main__":
