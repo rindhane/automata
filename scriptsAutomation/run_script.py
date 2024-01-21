@@ -23,4 +23,7 @@ def main(path):
     return True
 
 if __name__=='__main__':
+    #make sure to create folder :
+        #1. Conversion 
+        #2. images 
     main(path='Conversion')
